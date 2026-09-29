@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KDP Book Studio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    .card {
+      background: #fff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 700;
+    }
+
+    input, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 22px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: #f0f0f0;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+
+    <h1>📚 KDP Book Studio</h1>
+
+    <p>
+      Generatore di progetti per libri Amazon KDP.
+    </p>
+
+    <label>
+      Titolo
+      <input id="title" value="Il mio nuovo libro">
+    </label>
+
+    <label>
+      Tema
+      <input id="theme" value="Benessere">
+    </label>
+
+    <label>
+      Pubblico
+      <input id="audience" value="Adulti">
+    </label>
+
+    <label>
+      Pagine
+      <input id="pages" type="number" value="60" min="50">
+    </label>
+
+    <button onclick="createProject()">
+      CREA PROGETTO
+    </button>
+
+    <pre id="result">Pronto.</pre>
+
+  </div>
+
+<script>
+
+async function createProject() {
+
+  const data = {
+    title: document.getElementById('title').value,
+    theme: document.getElementById('theme').value,
+    audience: document.getElementById('audience').value,
+    pages: Number(document.getElementById('pages').value)
+  };
+
+  const box = document.getElementById('result');
+
+  box.textContent = 'Creazione in corso...';
+
+  try {
+
+    const r = await fetch('/api/plan', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const j = await r.json();
+
+    box.textContent = JSON.stringify(j, null, 2);
+
+  } catch (e) {
+
+    box.textContent = 'Errore: ' + e.message;
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
