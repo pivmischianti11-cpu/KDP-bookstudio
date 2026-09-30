@@ -1,272 +1,1364 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+>
+
 <title>KDP Book Studio</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f3f4f6;font-family:Arial,sans-serif;color:#222}
-main{max-width:850px;margin:auto;padding:15px}
-header{background:#171717;color:white;padding:22px;border-radius:18px;margin-bottom:15px}
-h1{margin:0 0 6px;font-size:26px}h2{font-size:19px}
-.card{background:white;padding:18px;border-radius:16px;margin:15px 0;box-shadow:0 2px 10px #ddd}
-label{display:block;font-weight:bold;margin:12px 0 6px}
-input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;font-size:16px}
-textarea{min-height:150px}
-button{width:100%;padding:14px;margin-top:14px;border:0;border-radius:10px;background:#222;color:white;font-size:16px;font-weight:bold}
-button.blue{background:#2457d6}button.green{background:#167c3b}
-.out{margin-top:12px;padding:14px;background:#f1f2f4;border-radius:10px;white-space:pre-wrap}
-.ok{background:#def5e5;padding:12px;border-radius:10px}
-.err{background:#ffe0e0;padding:12px;border-radius:10px}
-small{color:#666}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#f3f4f6;
+    font-family:Arial,sans-serif;
+    color:#222;
+}
+
+main{
+    max-width:850px;
+    margin:auto;
+    padding:15px;
+}
+
+header{
+    background:#171717;
+    color:white;
+    padding:22px;
+    border-radius:18px;
+    margin-bottom:15px;
+}
+
+h1{
+    margin:0 0 6px;
+    font-size:26px;
+}
+
+h2{
+    font-size:19px;
+}
+
+h3{
+    margin-top:0;
+}
+
+.card{
+    background:white;
+    padding:18px;
+    border-radius:16px;
+    margin:15px 0;
+    box-shadow:0 2px 10px #ddd;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:12px 0 6px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px;
+}
+
+textarea{
+    min-height:150px;
+    resize:vertical;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:14px;
+    border:0;
+    border-radius:10px;
+    background:#222;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.92;
+}
+
+button.blue{
+    background:#2457d6;
+}
+
+button.green{
+    background:#167c3b;
+}
+
+button.orange{
+    background:#d97706;
+}
+
+.out{
+    margin-top:12px;
+    padding:14px;
+    background:#f1f2f4;
+    border-radius:10px;
+    white-space:pre-wrap;
+    line-height:1.5;
+}
+
+.ok{
+    background:#def5e5;
+    padding:15px;
+    border-radius:10px;
+}
+
+.err{
+    background:#ffe0e0;
+    padding:15px;
+    border-radius:10px;
+}
+
+.info{
+    background:#e8eefc;
+    padding:15px;
+    border-radius:10px;
+}
+
+.warning{
+    background:#fff3cd;
+    padding:15px;
+    border-radius:10px;
+}
+
+a{
+    color:#2457d6;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+
+small{
+    color:#666;
+}
+
+hr{
+    border:0;
+    border-top:1px solid #ddd;
+    margin:15px 0;
+}
+
+.chapter{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:12px;
+    margin:8px 0;
+}
+
+.loading{
+    font-weight:bold;
+}
+
 </style>
+
 </head>
 
 <body>
+
 <main>
 
+<!-- ======================================================
+     HEADER
+====================================================== -->
+
 <header>
+
 <h1>📚 KDP Book Studio</h1>
-<p>Progetta e struttura il tuo libro per Amazon KDP.</p>
+
+<p>
+Progetta, struttura e genera il tuo libro
+per Amazon KDP.
+</p>
+
+<small style="color:#ccc;">
+Book Engine 2.0
+</small>
+
 </header>
 
+
+<!-- ======================================================
+     IDENTITÀ
+====================================================== -->
+
 <div class="card">
-<h2>📕 Identità</h2>
+
+<h2>📕 Identità del libro</h2>
 
 <label>Titolo</label>
-<input id="title" placeholder="Titolo del libro">
+
+<input
+    id="title"
+    placeholder="Titolo del libro"
+>
+
 
 <label>Sottotitolo</label>
-<input id="subtitle" placeholder="Sottotitolo">
+
+<input
+    id="subtitle"
+    placeholder="Sottotitolo"
+>
+
 
 <label>Autore</label>
-<input id="author" placeholder="Nome e cognome">
+
+<input
+    id="author"
+    placeholder="Nome e cognome"
+>
+
 
 <label>Pubblico</label>
-<input id="audience" value="Adulti">
+
+<input
+    id="audience"
+    value="Adulti"
+>
+
 
 <label>Lingua</label>
+
 <select id="language">
+
 <option>Italiano</option>
+
 <option>English</option>
+
 <option>Español</option>
+
 <option>Français</option>
+
 </select>
+
 </div>
 
+
+<!-- ======================================================
+     CONTENUTO
+====================================================== -->
+
 <div class="card">
+
 <h2>🎯 Contenuto</h2>
 
 <label>Tipo di libro</label>
+
 <select id="bookType">
-<option>Libro di crescita personale</option>
-<option>Libro autobiografico</option>
-<option>Workbook</option>
-<option>Libro di attività</option>
-<option>Libro di enigmistica</option>
-<option>Cerca parole</option>
-<option>Coloring book</option>
-<option>Libro di ricette</option>
-<option>Guida pratica</option>
-<option>Manuale</option>
+
+<option>
+Libro di crescita personale
+</option>
+
+<option>
+Libro autobiografico
+</option>
+
+<option>
+Workbook
+</option>
+
+<option>
+Libro di attività
+</option>
+
+<option>
+Libro di enigmistica
+</option>
+
+<option>
+Cerca parole
+</option>
+
+<option>
+Coloring book
+</option>
+
+<option>
+Libro di ricette
+</option>
+
+<option>
+Guida pratica
+</option>
+
+<option>
+Manuale
+</option>
+
 </select>
+
 
 <label>Tema principale</label>
-<input id="theme" placeholder="Es. crescita personale">
+
+<input
+    id="theme"
+    placeholder="Es. crescita personale"
+>
+
 
 <label>Tono</label>
+
 <select id="tone">
-<option>Professionale e accessibile</option>
-<option>Caldo ed empatico</option>
-<option>Motivazionale</option>
-<option>Didattico</option>
-<option>Semplice e diretto</option>
-<option>Elegante e narrativo</option>
+
+<option>
+Professionale e accessibile
+</option>
+
+<option>
+Caldo ed empatico
+</option>
+
+<option>
+Motivazionale
+</option>
+
+<option>
+Didattico
+</option>
+
+<option>
+Semplice e diretto
+</option>
+
+<option>
+Elegante e narrativo
+</option>
+
 </select>
+
 </div>
 
+
+<!-- ======================================================
+     KDP
+====================================================== -->
+
 <div class="card">
+
 <h2>📐 Impostazioni KDP</h2>
 
+
 <label>Pagine</label>
-<input id="pages" type="number" min="50" value="60">
+
+<input
+    id="pages"
+    type="number"
+    min="50"
+    value="60"
+>
+
 
 <label>Formato</label>
+
 <select id="format">
-<option value="6x9">6 × 9</option>
-<option value="8x10">8 × 10</option>
-<option value="8.5x11">8,5 × 11</option>
+
+<option value="6x9">
+6 × 9
+</option>
+
+<option value="8x10">
+8 × 10
+</option>
+
+<option value="8.5x11">
+8,5 × 11
+</option>
+
 </select>
+
 
 <label>Carta</label>
+
 <select id="paper">
-<option value="white">Bianca</option>
-<option value="cream">Crema</option>
+
+<option value="white">
+Bianca
+</option>
+
+<option value="cream">
+Crema
+</option>
+
 </select>
+
 
 <label>Interno</label>
+
 <select id="interior">
-<option value="bw">Bianco e nero</option>
-<option value="standard_color">Colore standard</option>
-<option value="premium_color">Colore premium</option>
+
+<option value="bw">
+Bianco e nero
+</option>
+
+<option value="standard_color">
+Colore standard
+</option>
+
+<option value="premium_color">
+Colore premium
+</option>
+
 </select>
 
+
 <label>
-<input id="bleed" type="checkbox" style="width:auto">
- Utilizza bleed
+
+<input
+    id="bleed"
+    type="checkbox"
+    style="width:auto"
+>
+
+Utilizza bleed
+
 </label>
+
 </div>
 
+
+<!-- ======================================================
+     ATTIVITÀ
+====================================================== -->
+
 <div class="card">
+
 <h2>🧩 Attività</h2>
 
+
 <label>Numero attività</label>
-<input id="activities" type="number" min="0" value="20">
 
-<button class="blue" onclick="generate()">🚀 Genera struttura</button>
+<input
+    id="activities"
+    type="number"
+    min="0"
+    value="20"
+>
 
-<div id="plan" class="out" style="display:none"></div>
+
+<button
+    class="blue"
+    onclick="generate()"
+>
+
+🚀 Genera struttura
+
+</button>
+
+
+<button
+    class="green"
+    onclick="generateBook()"
+>
+
+🧠 Genera il libro
+
+</button>
+
+
+<div
+    id="plan"
+    class="out"
+    style="display:none"
+></div>
+
 </div>
 
+
+<!-- ======================================================
+     REVISIONE
+====================================================== -->
+
 <div class="card">
+
 <h2>🔍 Revisione testo</h2>
 
-<textarea id="review" placeholder="Incolla qui il testo da controllare..."></textarea>
+<p>
+<small>
+Inserisci un testo per effettuare un primo controllo
+automatico di ripetizioni, spazi e punteggiatura.
+</small>
+</p>
 
-<button class="green" onclick="reviewText()">🔎 Controlla testo</button>
 
-<div id="reviewOut" class="out" style="display:none"></div>
+<textarea
+    id="review"
+    placeholder="Incolla qui il testo da controllare..."
+></textarea>
+
+
+<button
+    class="green"
+    onclick="reviewText()"
+>
+
+🔎 Controlla testo
+
+</button>
+
+
+<div
+    id="reviewOut"
+    class="out"
+    style="display:none"
+></div>
+
 </div>
 
+
+<!-- ======================================================
+     COPERTINA
+====================================================== -->
+
 <div class="card">
+
 <h2>🎨 Copertina</h2>
 
-<button onclick="cover()">📏 Calcola dimensioni copertina</button>
+<p>
 
-<div id="coverOut" class="out" style="display:none"></div>
+<small>
+Calcolo preliminare delle dimensioni della copertina.
+I valori definitivi devono essere verificati con
+le specifiche KDP aggiornate.
+</small>
+
+</p>
+
+
+<button
+    class="orange"
+    onclick="cover()"
+>
+
+📏 Calcola dimensioni copertina
+
+</button>
+
+
+<div
+    id="coverOut"
+    class="out"
+    style="display:none"
+></div>
+
 </div>
+
+
+<!-- ======================================================
+     PROGETTO
+====================================================== -->
 
 <div class="card">
+
 <h2>💾 Progetto</h2>
 
-<button onclick="saveProject()">📤 Salva progetto</button>
+<p>
 
-<div id="saveOut" class="out" style="display:none"></div>
+<small>
+Salva la configurazione del libro in formato JSON.
+</small>
+
+</p>
+
+
+<button
+    onclick="saveProject()"
+>
+
+📤 Salva progetto
+
+</button>
+
+
+<div
+    id="saveOut"
+    class="out"
+    style="display:none"
+></div>
+
 </div>
+
 
 </main>
 
+
 <script>
 
+/* ========================================================
+   FORMATO
+======================================================== */
+
 function format(){
- let f=document.getElementById("format").value;
- if(f=="8x10")return[8,10];
- if(f=="8.5x11")return[8.5,11];
- return[6,9];
+
+    let f =
+        document.getElementById("format").value;
+
+    if(f === "8x10"){
+        return [8,10];
+    }
+
+    if(f === "8.5x11"){
+        return [8.5,11];
+    }
+
+    return [6,9];
 }
+
+
+/* ========================================================
+   RACCOLTA DATI
+======================================================== */
 
 function data(){
- let f=format();
- return{
-  title:document.getElementById("title").value,
-  subtitle:document.getElementById("subtitle").value,
-  author:document.getElementById("author").value,
-  audience:document.getElementById("audience").value,
-  language:document.getElementById("language").value,
-  book_type:document.getElementById("bookType").value,
-  theme:document.getElementById("theme").value,
-  tone:document.getElementById("tone").value,
-  pages:Number(document.getElementById("pages").value),
-  width:f[0],
-  height:f[1],
-  paper:document.getElementById("paper").value,
-  interior:document.getElementById("interior").value,
-  bleed:document.getElementById("bleed").checked,
-  activities:Number(document.getElementById("activities").value)
- };
+
+    let f = format();
+
+    return {
+
+        title:
+            document.getElementById("title").value,
+
+        subtitle:
+            document.getElementById("subtitle").value,
+
+        author:
+            document.getElementById("author").value,
+
+        audience:
+            document.getElementById("audience").value,
+
+        language:
+            document.getElementById("language").value,
+
+        book_type:
+            document.getElementById("bookType").value,
+
+        theme:
+            document.getElementById("theme").value,
+
+        tone:
+            document.getElementById("tone").value,
+
+        pages:
+            Number(
+                document.getElementById("pages").value
+            ),
+
+        width:
+            f[0],
+
+        height:
+            f[1],
+
+        paper:
+            document.getElementById("paper").value,
+
+        interior:
+            document.getElementById("interior").value,
+
+        bleed:
+            document.getElementById("bleed").checked,
+
+        activities:
+            Number(
+                document.getElementById("activities").value
+            )
+
+    };
+
 }
+
+
+/* ========================================================
+   POST
+======================================================== */
 
 async function post(url,body){
- let r=await fetch(url,{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify(body)
- });
- let t=await r.text();
- let j;
- try{j=JSON.parse(t)}catch(e){throw new Error("Risposta non valida dal server")}
- if(!r.ok)throw new Error(j.error||"Errore del server");
- return j;
+
+    let response;
+
+    try{
+
+        response = await fetch(
+            url,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(body)
+            }
+        );
+
+    }catch(error){
+
+        throw new Error(
+            "Impossibile contattare il server."
+        );
+
+    }
+
+
+    let text =
+        await response.text();
+
+
+    let json;
+
+
+    try{
+
+        json =
+            JSON.parse(text);
+
+    }catch(error){
+
+        throw new Error(
+            "Risposta non valida dal server."
+        );
+
+    }
+
+
+    if(!response.ok){
+
+        throw new Error(
+            json.error ||
+            json.message ||
+            "Errore del server."
+        );
+
+    }
+
+
+    return json;
+
 }
+
+
+/* ========================================================
+   ESCAPE HTML
+======================================================== */
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ========================================================
+   GENERA STRUTTURA
+======================================================== */
 
 async function generate(){
- let o=document.getElementById("plan");
- o.style.display="block";
- o.textContent="⏳ Generazione in corso...";
- try{
-  let d=await post("/api/plan",data());
-  let s="✅ STRUTTURA GENERATA\n\n";
-  s+="Titolo: "+d.metadata.title+"\n";
-  s+="Pagine: "+d.spec.pages_target+"\n";
-  s+="Formato: "+d.spec.trim_width_in+" × "+d.spec.trim_height_in+"\n";
-  s+="Capitoli: "+d.sections.length+"\n\n";
-  d.sections.forEach(x=>{
-   s+=x.number+". "+x.title+" — circa "+x.estimated_pages+" pagine\n";
-  });
-  o.textContent=s;
- }catch(e){o.textContent="❌ "+e.message}
+
+    let output =
+        document.getElementById("plan");
+
+
+    output.style.display =
+        "block";
+
+
+    output.innerHTML =
+        "<div class='loading'>"+
+        "⏳ Generazione della struttura..."+
+        "</div>";
+
+
+    try{
+
+        let result =
+            await post(
+                "/api/plan",
+                data()
+            );
+
+
+        let text =
+            "✅ STRUTTURA GENERATA\n\n";
+
+
+        text +=
+            "Titolo: "+
+            result.metadata.title+
+            "\n";
+
+
+        text +=
+            "Pagine: "+
+            result.kdp.pages_target+
+            "\n";
+
+
+        text +=
+            "Formato: "+
+            result.kdp.trim_width_in+
+            " × "+
+            result.kdp.trim_height_in+
+            "\n";
+
+
+        text +=
+            "Capitoli: "+
+            result.chapters.length+
+            "\n\n";
+
+
+        result.chapters.forEach(
+            function(chapter){
+
+                text +=
+                    chapter.number+
+                    ". "+
+                    chapter.title+
+                    "\n";
+
+            }
+        );
+
+
+        output.textContent =
+            text;
+
+
+    }catch(error){
+
+        output.innerHTML =
+            "<div class='err'>"+
+            "❌ "+
+            escapeHtml(
+                error.message
+            )+
+            "</div>";
+
+    }
+
 }
+
+
+/* ========================================================
+   GENERA IL LIBRO
+======================================================== */
+
+async function generateBook(){
+
+    let output =
+        document.getElementById("plan");
+
+
+    output.style.display =
+        "block";
+
+
+    output.innerHTML =
+
+        "<div class='info'>"+
+        "<div class='loading'>"+
+        "⏳ Generazione del libro in corso..."+
+        "</div>"+
+        "<br>"+
+        "Il sistema sta preparando "+
+        "il manoscritto, i capitoli, "+
+        "le attività e la conclusione."+
+        "</div>";
+
+
+    try{
+
+        let result =
+            await post(
+                "/api/generate-book",
+                data()
+            );
+
+
+        let book =
+            result.book;
+
+
+        let html =
+            "<div class='ok'>";
+
+
+        html +=
+            "<h3>📚 LIBRO GENERATO</h3>";
+
+
+        html +=
+            "<p><strong>Titolo:</strong> "+
+            escapeHtml(
+                book.metadata.title
+            )+
+            "</p>";
+
+
+        if(
+            book.metadata.subtitle
+        ){
+
+            html +=
+                "<p><strong>Sottotitolo:</strong> "+
+                escapeHtml(
+                    book.metadata.subtitle
+                )+
+                "</p>";
+
+        }
+
+
+        html +=
+            "<p><strong>Autore:</strong> "+
+            escapeHtml(
+                book.metadata.author
+            )+
+            "</p>";
+
+
+        html +=
+            "<p><strong>Tipo:</strong> "+
+            escapeHtml(
+                document.getElementById(
+                    "bookType"
+                ).value
+            )+
+            "</p>";
+
+
+        html +=
+            "<p><strong>Capitoli generati:</strong> "+
+            book.chapters.length+
+            "</p>";
+
+
+        html +=
+            "<p><strong>Target pagine:</strong> "+
+            book.kdp.pages_target+
+            "</p>";
+
+
+        html +=
+            "<hr>";
+
+
+        html +=
+            "<h3>📖 Indice</h3>";
+
+
+        book.table_of_contents.forEach(
+            function(item){
+
+                html +=
+                    "<div class='chapter'>"+
+                    "<strong>"+
+                    item.number+
+                    ".</strong> "+
+                    escapeHtml(
+                        item.title
+                    )+
+                    "</div>";
+
+            }
+        );
+
+
+        html +=
+            "<hr>";
+
+
+        html +=
+            "<p>"+
+            "Il manoscritto è stato generato "+
+            "dal motore del progetto."+
+            "</p>";
+
+
+        html +=
+            "<a href='"+
+
+            escapeHtml(
+                result.url
+            )+
+
+            "' target='_blank'>"+
+            "📄 Apri il manoscritto"+
+            "</a>";
+
+
+        html +=
+            "</div>";
+
+
+        output.innerHTML =
+            html;
+
+
+    }catch(error){
+
+        output.innerHTML =
+
+            "<div class='err'>"+
+
+            "<strong>"+
+            "❌ Errore durante la generazione"+
+            "</strong>"+
+
+            "<br><br>"+
+
+            escapeHtml(
+                error.message
+            )+
+
+            "</div>";
+
+    }
+
+}
+
+
+/* ========================================================
+   REVISIONE TESTO
+======================================================== */
 
 async function reviewText(){
- let o=document.getElementById("reviewOut");
- o.style.display="block";
- let text=document.getElementById("review").value;
- if(!text.trim()){o.textContent="⚠️ Inserisci un testo.";return}
- o.textContent="⏳ Controllo...";
- try{
-  let d=await post("/api/review",{text:text});
-  let s="✅ Punteggio preliminare: "+d.score+"/100\n\n";
-  s+="Parole: "+d.stats.words+"\n";
-  s+="Frasi: "+d.stats.sentences+"\n";
-  s+="Caratteri: "+d.stats.characters+"\n\n";
-  if(d.issues.length){
-   s+="⚠️ Problemi:\n";
-   d.issues.forEach(x=>s+="• "+x.message+"\n");
-  }else s+="Nessun problema automatico rilevato.";
-  o.textContent=s;
- }catch(e){o.textContent="❌ "+e.message}
+
+    let output =
+        document.getElementById(
+            "reviewOut"
+        );
+
+
+    output.style.display =
+        "block";
+
+
+    let text =
+        document.getElementById(
+            "review"
+        ).value;
+
+
+    if(!text.trim()){
+
+        output.innerHTML =
+            "<div class='warning'>"+
+            "⚠️ Inserisci un testo da controllare."+
+            "</div>";
+
+        return;
+
+    }
+
+
+    output.innerHTML =
+        "<div class='loading'>"+
+        "⏳ Controllo del testo..."+
+        "</div>";
+
+
+    try{
+
+        let result =
+            await post(
+                "/api/review",
+                {
+                    text:text
+                }
+            );
+
+
+        let html =
+            "<div class='ok'>";
+
+
+        html +=
+            "<strong>"+
+            "✅ Punteggio preliminare: "+
+            result.score+
+            "/100"+
+            "</strong>";
+
+
+        html +=
+            "<br><br>";
+
+
+        html +=
+            "Parole: "+
+            result.stats.words+
+            "<br>";
+
+
+        html +=
+            "Frasi: "+
+            result.stats.sentences+
+            "<br>";
+
+
+        html +=
+            "Caratteri: "+
+            result.stats.characters;
+
+
+        html +=
+            "</div>";
+
+
+        if(
+            result.issues.length
+        ){
+
+            html +=
+                "<div class='warning' "+
+                "style='margin-top:10px'>";
+
+
+            html +=
+                "<strong>"+
+                "⚠️ Problemi rilevati"+
+                "</strong>";
+
+
+            html +=
+                "<ul>";
+
+
+            result.issues.forEach(
+                function(issue){
+
+                    html +=
+                        "<li>"+
+                        escapeHtml(
+                            issue.message
+                        )+
+                        "</li>";
+
+                }
+            );
+
+
+            html +=
+                "</ul>";
+
+            html +=
+                "</div>";
+
+        }else{
+
+            html +=
+                "<div class='ok' "+
+                "style='margin-top:10px'>"+
+                "Nessun problema automatico rilevato."+
+                "</div>";
+
+        }
+
+
+        output.innerHTML =
+            html;
+
+
+    }catch(error){
+
+        output.innerHTML =
+            "<div class='err'>"+
+            "❌ "+
+            escapeHtml(
+                error.message
+            )+
+            "</div>";
+
+    }
+
 }
+
+
+/* ========================================================
+   COPERTINA
+======================================================== */
 
 async function cover(){
- let o=document.getElementById("coverOut");
- o.style.display="block";
- o.textContent="⏳ Calcolo...";
- try{
-  let d=data();
-  let c=await post("/api/cover",{
-   width:d.width,height:d.height,pages:d.pages,
-   paper:d.paper,interior:d.interior
-  });
-  o.textContent=
-   "📕 COPERTINA\n\n"+
-   "Larghezza: "+c.cover_width_in+" pollici\n"+
-   "Altezza: "+c.cover_height_in+" pollici\n"+
-   "Dorso: "+c.spine_in+" pollici\n\n"+
-   "⚠️ "+c.note;
- }catch(e){o.textContent="❌ "+e.message}
+
+    let output =
+        document.getElementById(
+            "coverOut"
+        );
+
+
+    output.style.display =
+        "block";
+
+
+    output.innerHTML =
+        "<div class='loading'>"+
+        "⏳ Calcolo delle dimensioni..."+
+        "</div>";
+
+
+    try{
+
+        let d =
+            data();
+
+
+        let result =
+            await post(
+                "/api/cover",
+                {
+
+                    width:d.width,
+
+                    height:d.height,
+
+                    pages:d.pages,
+
+                    paper:d.paper,
+
+                    interior:d.interior
+
+                }
+            );
+
+
+        output.innerHTML =
+
+            "<div class='info'>"+
+
+            "<h3>📕 DIMENSIONI PRELIMINARI</h3>"+
+
+            "<strong>Larghezza:</strong> "+
+            result.cover_width_in+
+            " pollici<br><br>"+
+
+            "<strong>Altezza:</strong> "+
+            result.cover_height_in+
+            " pollici<br><br>"+
+
+            "<strong>Dorso:</strong> "+
+            result.spine_in+
+            " pollici<br><br>"+
+
+            "<strong>Bleed:</strong> "+
+            result.bleed_in+
+            " pollici<br><br>"+
+
+            "⚠️ "+
+            escapeHtml(
+                result.note
+            )+
+
+            "</div>";
+
+
+    }catch(error){
+
+        output.innerHTML =
+            "<div class='err'>"+
+            "❌ "+
+            escapeHtml(
+                error.message
+            )+
+            "</div>";
+
+    }
+
 }
+
+
+/* ========================================================
+   SALVA PROGETTO
+======================================================== */
 
 async function saveProject(){
- let o=document.getElementById("saveOut");
- o.style.display="block";
- o.textContent="⏳ Salvataggio...";
- try{
-  let d=await post("/api/export-project",data());
-  o.innerHTML='<div class="ok">✅ Progetto salvato.<br><br><a href="'+d.url+'">📥 Scarica progetto</a></div>';
- }catch(e){o.textContent="❌ "+e.message}
-}
 
-</script>
-</body>
-</html>
+    let output =
+        document.getElementById(
+            "saveOut"
+        );
+
+
+    output.style.display =
+        "block";
+
+
+    output.innerHTML =
+        "<div class='loading'>"+
+        "⏳ Salvataggio del progetto..."+
+        "</div>";
+
+
+    try{
+
+        let result =
+            await post(
+                "/api/export-project",
+                data()
+            );
+
+
+        output.innerHTML =
+
+            "<div class='ok'>"+
+
+            "✅ Progetto salvato correttamente."+
+
+            "<br><br>"+
+
+            "<a href='"+
+
+     
