@@ -6,14 +6,11 @@ import math
 from datetime import datetime
 
 # ============================================================
-# KDP BOOK STUDIO
-# Backend principale
+# KDP BOOK STUDIO — BOOK ENGINE 1.0
 # ============================================================
 
 BASE = Path(__file__).resolve().parent
 OUT = BASE / "output"
-
-# Crea automaticamente la cartella output
 OUT.mkdir(parents=True, exist_ok=True)
 
 app = Flask(
@@ -24,15 +21,33 @@ app = Flask(
 
 
 # ============================================================
-# FUNZIONI KDP
+# UTILITY
+# ============================================================
+
+def slug(value):
+    value = str(value or "").strip()
+    value = re.sub(r"[^a-zA-Z0-9À-ÿ_-]+", "_", value)
+    value = value.strip("_")
+    return value or "book"
+
+
+def safe_number(value, default):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def clean_text(value, default=""):
+    value = str(value or "").strip()
+    return value if value else default
+
+
+# ============================================================
+# KDP
 # ============================================================
 
 def kdp_margins(pages, bleed=False):
-    """
-    Calcolo preliminare dei margini interni.
-    I valori definitivi devono sempre essere verificati
-    con le specifiche KDP aggiornate prima della pubblicazione.
-    """
 
     if pages <= 150:
         inside = 0.375
@@ -56,24 +71,13 @@ def kdp_margins(pages, bleed=False):
 
 
 def spine_width(pages, paper="white", interior="bw"):
-    """
-    Calcolo preliminare del dorso.
-
-    ATTENZIONE:
-    questo è un calcolo tecnico preliminare.
-    Per la copertina finale bisogna verificare i valori
-    tramite il Cover Calculator KDP aggiornato.
-    """
 
     if interior == "premium_color":
         factor = 0.002347
-
     elif interior == "standard_color":
         factor = 0.002252
-
     elif paper == "cream":
         factor = 0.0025
-
     else:
         factor = 0.002252
 
@@ -87,9 +91,6 @@ def cover_dimensions(
     paper="white",
     interior="bw"
 ):
-    """
-    Calcola le dimensioni preliminari della copertina completa.
-    """
 
     spine = spine_width(
         pages,
@@ -99,82 +100,27 @@ def cover_dimensions(
 
     bleed = 0.125
 
-    cover_width = (
-        bleed
-        + width
-        + spine
-        + width
-        + bleed
-    )
-
-    cover_height = (
-        bleed
-        + height
-        + bleed
-    )
-
     return {
         "cover_width_in": round(
-            cover_width,
+            bleed + width + spine + width + bleed,
             4
         ),
 
         "cover_height_in": round(
-            cover_height,
+            bleed + height + bleed,
             4
         ),
 
-        "spine_in": round(
-            spine,
-            4
-        ),
+        "spine_in": round(spine, 4),
 
         "bleed_in": bleed,
 
         "note": (
             "Dimensioni preliminari. "
-            "Verificare sempre il Cover Calculator "
-            "KDP prima della pubblicazione."
+            "Prima della pubblicazione verificare "
+            "sempre le specifiche KDP aggiornate."
         )
     }
-
-
-# ============================================================
-# UTILITY
-# ============================================================
-
-def slug(value):
-    """
-    Trasforma il titolo in un nome file sicuro.
-    """
-
-    value = str(value).strip()
-
-    value = re.sub(
-        r"[^a-zA-Z0-9_-]+",
-        "_",
-        value
-    )
-
-    value = value.strip("_")
-
-    return value or "book"
-
-
-def safe_number(value, default):
-    """
-    Converte un valore numerico senza mandare
-    il server in errore.
-    """
-
-    try:
-        return float(value)
-
-    except (
-        TypeError,
-        ValueError
-    ):
-        return default
 
 
 # ============================================================
@@ -184,19 +130,14 @@ def safe_number(value, default):
 def review_text(text):
 
     text = str(text or "")
-
     issues = []
 
-    # --------------------------------------------------------
-    # Parole ripetute immediatamente
-    # --------------------------------------------------------
-
+    # Ripetizioni immediate
     for match in re.finditer(
         r"\b(\w+)(?:\s+\1\b)",
         text,
         re.IGNORECASE
     ):
-
         issues.append({
             "type": "ripetizione",
             "severity": "warning",
@@ -206,63 +147,28 @@ def review_text(text):
             )
         })
 
-    # --------------------------------------------------------
     # Doppi spazi
-    # --------------------------------------------------------
-
-    if re.search(
-        r" {2,}",
-        text
-    ):
-
+    if re.search(r" {2,}", text):
         issues.append({
             "type": "spaziatura",
             "severity": "warning",
             "message": "Doppio spazio rilevato."
         })
 
-    # --------------------------------------------------------
-    # Punteggiatura eccessiva
-    # --------------------------------------------------------
-
-    if re.search(
-        r"[!?]{3,}",
-        text
-    ):
-
+    # Punteggiatura
+    if re.search(r"[!?]{3,}", text):
         issues.append({
             "type": "punteggiatura",
             "severity": "warning",
             "message": "Punteggiatura eccessiva."
         })
 
-    # --------------------------------------------------------
-    # Sequenze di punti
-    # --------------------------------------------------------
-
-    if re.search(
-        r"\.{4,}",
-        text
-    ):
-
+    if re.search(r"\.{4,}", text):
         issues.append({
             "type": "punteggiatura",
             "severity": "warning",
             "message": "Sequenza di punti eccessiva."
         })
-
-    # --------------------------------------------------------
-    # Statistiche
-    # --------------------------------------------------------
-
-    sentences = [
-        sentence.strip()
-        for sentence in re.split(
-            r"[.!?]+",
-            text
-        )
-        if sentence.strip()
-    ]
 
     words = re.findall(
         r"\b\w+\b",
@@ -270,16 +176,23 @@ def review_text(text):
         re.UNICODE
     )
 
+    sentences = [
+        x.strip()
+        for x in re.split(
+            r"[.!?]+",
+            text
+        )
+        if x.strip()
+    ]
+
     score = max(
         0,
         100 - len(issues) * 5
     )
 
     return {
-        "issues": issues,
-
         "score": score,
-
+        "issues": issues,
         "stats": {
             "words": len(words),
             "sentences": len(sentences),
@@ -289,40 +202,131 @@ def review_text(text):
 
 
 # ============================================================
-# COSTRUZIONE DEL PROGETTO
+# STRUTTURA DEL LIBRO
 # ============================================================
 
-def build_project(data):
+def generate_chapters(
+    title,
+    theme,
+    audience,
+    tone,
+    pages,
+    activities
+):
 
-    title = str(
-        data.get("title")
-        or "Il mio nuovo libro"
-    ).strip()
+    chapters_count = max(
+        5,
+        min(
+            20,
+            math.ceil(pages / 10)
+        )
+    )
 
-    subtitle = str(
+    chapters = []
+
+    for i in range(1, chapters_count + 1):
+
+        chapters.append({
+            "number": i,
+            "title": f"Capitolo {i} — {theme}",
+            "introduction": (
+                f"In questo capitolo affrontiamo "
+                f"un aspetto importante di {theme}, "
+                f"con un approccio {tone.lower()} "
+                f"pensato per {audience.lower()}."
+            ),
+
+            "sections": [
+                {
+                    "title": "Il punto di partenza",
+                    "content": (
+                        f"Comprendere {theme} significa "
+                        f"prima di tutto fermarsi a osservare "
+                        f"la situazione con maggiore attenzione. "
+                        f"Questo capitolo introduce i concetti "
+                        f"fondamentali e li collega alla vita "
+                        f"quotidiana del lettore."
+                    )
+                },
+
+                {
+                    "title": "Comprendere il problema",
+                    "content": (
+                        "Ogni cambiamento significativo nasce "
+                        "dalla capacità di riconoscere ciò che "
+                        "funziona e ciò che invece deve essere "
+                        "modificato. In questa sezione il lettore "
+                        "viene accompagnato passo dopo passo "
+                        "nell'analisi."
+                    )
+                },
+
+                {
+                    "title": "Passare all'azione",
+                    "content": (
+                        "La conoscenza diventa realmente utile "
+                        "quando viene trasformata in un'azione "
+                        "concreta. Per questo motivo è importante "
+                        "procedere con obiettivi chiari, realistici "
+                        "e verificabili."
+                    )
+                }
+            ],
+
+            "activity": (
+                i <= activities
+            ),
+
+            "activity_text": (
+                f"ESERCIZIO — Capitolo {i}\n\n"
+                f"Scrivi tre cose che hai compreso "
+                f"su {theme} e indica una piccola azione "
+                f"che puoi mettere in pratica."
+            )
+        })
+
+    return chapters
+
+
+# ============================================================
+# COSTRUZIONE LIBRO
+# ============================================================
+
+def build_book(data):
+
+    title = clean_text(
+        data.get("title"),
+        "Il mio nuovo libro"
+    )
+
+    subtitle = clean_text(
         data.get("subtitle")
-        or ""
-    ).strip()
+    )
 
-    author = str(
-        data.get("author")
-        or ""
-    ).strip()
+    author = clean_text(
+        data.get("author"),
+        "Autore"
+    )
 
-    theme = str(
-        data.get("theme")
-        or "Benessere"
-    ).strip()
+    theme = clean_text(
+        data.get("theme"),
+        "Crescita personale"
+    )
 
-    audience = str(
-        data.get("audience")
-        or "Adulti"
-    ).strip()
+    audience = clean_text(
+        data.get("audience"),
+        "Adulti"
+    )
 
-    tone = str(
-        data.get("tone")
-        or "Professionale e accessibile"
-    ).strip()
+    tone = clean_text(
+        data.get("tone"),
+        "Professionale e accessibile"
+    )
+
+    language = clean_text(
+        data.get("language"),
+        "Italiano"
+    )
 
     pages = max(
         50,
@@ -330,6 +334,16 @@ def build_project(data):
             safe_number(
                 data.get("pages"),
                 60
+            )
+        )
+    )
+
+    activities = max(
+        0,
+        int(
+            safe_number(
+                data.get("activities"),
+                10
             )
         )
     )
@@ -344,77 +358,51 @@ def build_project(data):
         9
     )
 
-    activities = max(
-        0,
-        int(
-            safe_number(
-                data.get("activities"),
-                20
-            )
-        )
-    )
-
     bleed = bool(
         data.get("bleed", False)
     )
 
-    paper = data.get(
-        "paper",
+    paper = clean_text(
+        data.get("paper"),
         "white"
     )
 
-    interior = data.get(
-        "interior",
+    interior = clean_text(
+        data.get("interior"),
         "bw"
     )
 
     # --------------------------------------------------------
-    # Numero capitoli
+    # Capitoli
     # --------------------------------------------------------
 
-    chapters = max(
-        1,
-        min(
-            20,
-            math.ceil(
-                pages / 10
-            )
-        )
+    chapters = generate_chapters(
+        title,
+        theme,
+        audience,
+        tone,
+        pages,
+        activities
     )
 
-    sections = []
+    # --------------------------------------------------------
+    # Indice
+    # --------------------------------------------------------
 
-    for index in range(chapters):
+    toc = []
 
-        sections.append({
+    for chapter in chapters:
 
-            "number": index + 1,
-
-            "title": (
-                f"Capitolo {index + 1} "
-                f"— {theme}"
-            ),
-
-            "purpose": (
-                "Spiegazione, esempio pratico, "
-                "elemento visivo e attività."
-            ),
-
-            "estimated_pages": max(
-                2,
-                pages // chapters
-            ),
-
-            "activity": (
-                index < activities
-            )
+        toc.append({
+            "number": chapter["number"],
+            "title": chapter["title"]
         })
 
     # --------------------------------------------------------
-    # Progetto completo
+    # Libro
     # --------------------------------------------------------
 
-    project = {
+    book = {
 
         "metadata": {
 
@@ -424,10 +412,7 @@ def build_project(data):
 
             "author": author,
 
-            "language": data.get(
-                "language",
-                "Italiano"
-            ),
+            "language": language,
 
             "theme": theme,
 
@@ -435,15 +420,12 @@ def build_project(data):
 
             "tone": tone,
 
-            "created_at": (
-                datetime.now()
-                .isoformat(
-                    timespec="seconds"
-                )
+            "created_at": datetime.now().isoformat(
+                timespec="seconds"
             )
         },
 
-        "spec": {
+        "kdp": {
 
             "pages_target": pages,
 
@@ -471,26 +453,150 @@ def build_project(data):
             )
         },
 
-        "editorial_profile": {
+        "front_matter": {
 
-            "target": audience,
+            "title_page": title,
 
-            "tone": tone,
+            "copyright": (
+                f"© {datetime.now().year} {author}. "
+                "Tutti i diritti riservati."
+            ),
+
+            "introduction": (
+                f"Benvenuto in «{title}».\n\n"
+                f"Questo libro è stato progettato per "
+                f"accompagnare il lettore nell'esplorazione "
+                f"di {theme}, attraverso spiegazioni, "
+                f"riflessioni ed esercizi pratici."
+            )
+        },
+
+        "table_of_contents": toc,
+
+        "chapters": chapters,
+
+        "conclusion": (
+            f"Arrivato alla fine di questo percorso su "
+            f"{theme}, il passo più importante è trasformare "
+            "ciò che hai letto in qualcosa di concreto. "
+            "Anche un piccolo cambiamento può diventare "
+            "l'inizio di un percorso più ampio."
+        ),
+
+        "editorial": {
 
             "quality_target": "alto",
 
             "repetition_tolerance": "bassa",
 
             "review_loop": (
-                "Genera → analizza → "
-                "correggi → ricontrolla"
-            )
-        },
+                "Genera → analizza → correggi → "
+                "ricontrolla"
+            ),
 
-        "sections": sections
+            "status": "bozza generata"
+        }
     }
 
-    return project
+    return book
+
+
+# ============================================================
+# TESTO COMPLETO DEL LIBRO
+# ============================================================
+
+def book_to_text(book):
+
+    lines = []
+
+    meta = book["metadata"]
+
+    lines.append(meta["title"])
+    lines.append("")
+
+    if meta["subtitle"]:
+        lines.append(meta["subtitle"])
+        lines.append("")
+
+    lines.append(f"Autore: {meta['author']}")
+    lines.append("")
+    lines.append("=" * 60)
+    lines.append("")
+
+    lines.append("COPYRIGHT")
+    lines.append("")
+    lines.append(
+        book["front_matter"]["copyright"]
+    )
+    lines.append("")
+
+    lines.append("INTRODUZIONE")
+    lines.append("")
+    lines.append(
+        book["front_matter"]["introduction"]
+    )
+    lines.append("")
+
+    lines.append("INDICE")
+    lines.append("")
+
+    for item in book["table_of_contents"]:
+
+        lines.append(
+            f"{item['number']}. {item['title']}"
+        )
+
+    lines.append("")
+
+    for chapter in book["chapters"]:
+
+        lines.append("=" * 60)
+
+        lines.append(
+            chapter["title"]
+        )
+
+        lines.append("=" * 60)
+        lines.append("")
+
+        lines.append(
+            chapter["introduction"]
+        )
+
+        lines.append("")
+
+        for section in chapter["sections"]:
+
+            lines.append(
+                section["title"]
+            )
+
+            lines.append("")
+
+            lines.append(
+                section["content"]
+            )
+
+            lines.append("")
+
+        if chapter["activity"]:
+
+            lines.append(
+                chapter["activity_text"]
+            )
+
+            lines.append("")
+
+    lines.append("=" * 60)
+    lines.append("CONCLUSIONE")
+    lines.append("=" * 60)
+    lines.append("")
+
+    lines.append(
+        book["conclusion"]
+    )
+
+    return "\n".join(lines)
 
 
 # ============================================================
@@ -506,24 +612,21 @@ def index():
 
 
 # ============================================================
-# HEALTH CHECK
+# HEALTH
 # ============================================================
 
 @app.get("/health")
 def health():
 
     return jsonify({
-
         "status": "ok",
-
         "service": "KDP Book Studio",
-
-        "version": "1.0"
+        "version": "2.0-book-engine"
     })
 
 
 # ============================================================
-# GENERAZIONE STRUTTURA
+# GENERA STRUTTURA
 # ============================================================
 
 @app.post("/api/plan")
@@ -533,17 +636,56 @@ def plan():
         force=True
     ) or {}
 
-    project = build_project(
-        data
-    )
+    book = build_book(data)
 
-    return jsonify(
-        project
-    )
+    return jsonify(book)
 
 
 # ============================================================
-# REVISIONE TESTO
+# GENERA LIBRO
+# ============================================================
+
+@app.post("/api/generate-book")
+def generate_book():
+
+    data = request.get_json(
+        force=True
+    ) or {}
+
+    book = build_book(data)
+
+    text = book_to_text(book)
+
+    filename = (
+        f"{slug(book['metadata']['title'])}"
+        "_manoscritto.txt"
+    )
+
+    path = OUT / filename
+
+    path.write_text(
+        text,
+        encoding="utf-8"
+    )
+
+    return jsonify({
+
+        "status": "ok",
+
+        "message": (
+            "Manoscritto generato."
+        ),
+
+        "file": filename,
+
+        "url": f"/output/{filename}",
+
+        "book": book
+    })
+
+
+# ============================================================
+# REVISIONE
 # ============================================================
 
 @app.post("/api/review")
@@ -564,7 +706,7 @@ def review():
 
 
 # ============================================================
-# CALCOLO COPERTINA
+# COPERTINA
 # ============================================================
 
 @app.post("/api/cover")
@@ -591,13 +733,13 @@ def cover():
         )
     )
 
-    paper = data.get(
-        "paper",
+    paper = clean_text(
+        data.get("paper"),
         "white"
     )
 
-    interior = data.get(
-        "interior",
+    interior = clean_text(
+        data.get("interior"),
         "bw"
     )
 
@@ -613,7 +755,7 @@ def cover():
 
 
 # ============================================================
-# ESPORTAZIONE PROGETTO
+# SALVA PROGETTO
 # ============================================================
 
 @app.post("/api/export-project")
@@ -623,12 +765,10 @@ def export_project():
         force=True
     ) or {}
 
-    project = build_project(
-        data
-    )
+    book = build_book(data)
 
     filename = (
-        f"{slug(project['metadata']['title'])}"
+        f"{slug(book['metadata']['title'])}"
         "_project.json"
     )
 
@@ -636,7 +776,7 @@ def export_project():
 
     path.write_text(
         json.dumps(
-            project,
+            book,
             ensure_ascii=False,
             indent=2
         ),
@@ -647,14 +787,12 @@ def export_project():
 
         "file": filename,
 
-        "url": (
-            f"/output/{filename}"
-        )
+        "url": f"/output/{filename}"
     })
 
 
 # ============================================================
-# DOWNLOAD FILE
+# DOWNLOAD
 # ============================================================
 
 @app.get("/output/<path:name>")
@@ -668,7 +806,7 @@ def output(name):
 
 
 # ============================================================
-# AVVIO SERVER
+# AVVIO
 # ============================================================
 
 if __name__ == "__main__":
@@ -677,4 +815,4 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=5000,
         debug=False
-    )
+        )
