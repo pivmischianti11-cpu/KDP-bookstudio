@@ -1327,20 +1327,14 @@ async function cover(){
 async function saveProject(){
 
     let output =
-        document.getElementById(
-            "saveOut"
-        );
+        document.getElementById("saveOut");
 
-
-    output.style.display =
-        "block";
-
+    output.style.display = "block";
 
     output.innerHTML =
         "<div class='loading'>"+
         "⏳ Salvataggio del progetto..."+
         "</div>";
-
 
     try{
 
@@ -1350,15 +1344,28 @@ async function saveProject(){
                 data()
             );
 
+        output.innerHTML =
+            "<div class='ok'>"+
+            "✅ Progetto salvato correttamente."+
+            "<br><br>"+
+            "<a href='"+escapeHtml(result.url)+"' target='_blank'>"+
+            "📥 Scarica il progetto JSON"+
+            "</a>"+
+            "</div>";
+
+    }catch(error){
 
         output.innerHTML =
+            "<div class='err'>"+
+            "❌ "+
+            escapeHtml(error.message)+
+            "</div>";
 
-            "<div class='ok'>"+
+    }
 
-            "✅ Progetto salvato correttamente."+
+}
 
-            "<br><br>"+
+</script>
 
-            "<a href='"+
-
-     
+</body>
+</html>
