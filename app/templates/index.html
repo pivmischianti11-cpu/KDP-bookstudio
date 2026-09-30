@@ -2,819 +2,271 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>KDP Book Studio</title>
-
 <style>
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    padding:0;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#f4f5f7;
-    color:#202124;
-}
-
-.container{
-    width:100%;
-    max-width:900px;
-    margin:auto;
-    padding:18px;
-}
-
-.header{
-    background:#171717;
-    color:white;
-    border-radius:18px;
-    padding:22px;
-    margin-bottom:18px;
-}
-
-.header h1{
-    margin:0 0 7px 0;
-    font-size:27px;
-}
-
-.header p{
-    margin:0;
-    color:#d5d5d5;
-    line-height:1.5;
-}
-
-.card{
-    background:white;
-    border-radius:18px;
-    padding:20px;
-    margin-bottom:18px;
-    box-shadow:0 3px 14px rgba(0,0,0,.06);
-}
-
-.card h2{
-    margin-top:0;
-    font-size:20px;
-}
-
-label{
-    display:block;
-    font-weight:bold;
-    margin:15px 0 7px;
-}
-
-input,
-select,
-textarea{
-    width:100%;
-    border:1px solid #d5d8dc;
-    border-radius:11px;
-    padding:13px;
-    font-size:16px;
-    background:white;
-}
-
-textarea{
-    min-height:160px;
-    resize:vertical;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-}
-
-button{
-    width:100%;
-    border:0;
-    border-radius:12px;
-    padding:14px;
-    margin-top:14px;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    background:#222;
-    color:white;
-}
-
-button.secondary{
-    background:#e9eaed;
-    color:#222;
-}
-
-button.green{
-    background:#167c3b;
-}
-
-button.blue{
-    background:#2457d6;
-}
-
-.result{
-    margin-top:15px;
-    background:#f5f6f8;
-    border-radius:12px;
-    padding:15px;
-    white-space:pre-wrap;
-    overflow:auto;
-}
-
-.stat{
-    display:inline-block;
-    background:#eee;
-    padding:8px 10px;
-    border-radius:8px;
-    margin:4px;
-    font-size:14px;
-}
-
-.hidden{
-    display:none;
-}
-
-.warning{
-    background:#fff3cd;
-    padding:10px;
-    border-radius:8px;
-    margin-top:8px;
-}
-
-.success{
-    background:#dff5e6;
-    padding:12px;
-    border-radius:10px;
-    margin-top:12px;
-}
-
-.footer{
-    text-align:center;
-    color:#777;
-    font-size:13px;
-    padding:20px;
-}
-
-@media(max-width:650px){
-    .grid{
-        grid-template-columns:1fr;
-    }
-
-    .container{
-        padding:12px;
-    }
-
-    .header h1{
-        font-size:23px;
-    }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#f3f4f6;font-family:Arial,sans-serif;color:#222}
+main{max-width:850px;margin:auto;padding:15px}
+header{background:#171717;color:white;padding:22px;border-radius:18px;margin-bottom:15px}
+h1{margin:0 0 6px;font-size:26px}h2{font-size:19px}
+.card{background:white;padding:18px;border-radius:16px;margin:15px 0;box-shadow:0 2px 10px #ddd}
+label{display:block;font-weight:bold;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;font-size:16px}
+textarea{min-height:150px}
+button{width:100%;padding:14px;margin-top:14px;border:0;border-radius:10px;background:#222;color:white;font-size:16px;font-weight:bold}
+button.blue{background:#2457d6}button.green{background:#167c3b}
+.out{margin-top:12px;padding:14px;background:#f1f2f4;border-radius:10px;white-space:pre-wrap}
+.ok{background:#def5e5;padding:12px;border-radius:10px}
+.err{background:#ffe0e0;padding:12px;border-radius:10px}
+small{color:#666}
 </style>
 </head>
 
 <body>
-
-<div class="container">
-
-    <div class="header">
-        <h1>📚 KDP Book Studio</h1>
-        <p>
-            Crea e struttura il tuo libro per Amazon KDP,
-            controlla il progetto e prepara la base editoriale.
-        </p>
-    </div>
-
-
-    <!-- IDENTITÀ LIBRO -->
-
-    <div class="card">
-
-        <h2>📕 1. Identità del libro</h2>
-
-        <label>Titolo</label>
-        <input id="title" placeholder="Es. Il potere di ricominciare">
-
-        <label>Sottotitolo</label>
-        <input id="subtitle" placeholder="Inserisci il sottotitolo">
-
-        <label>Autore</label>
-        <input id="author" placeholder="Nome e cognome">
-
-        <div class="grid">
-
-            <div>
-                <label>Lingua</label>
-                <select id="language">
-                    <option value="Italiano">Italiano</option>
-                    <option value="English">English</option>
-                    <option value="Español">Español</option>
-                    <option value="Français">Français</option>
-                </select>
-            </div>
-
-            <div>
-                <label>Pubblico</label>
-                <input id="audience" placeholder="Es. Adulti 40-50">
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- CONTENUTO -->
-
-    <div class="card">
-
-        <h2>🎯 2. Contenuto</h2>
-
-        <label>Tipo di libro</label>
-
-        <select id="bookType">
-            <option>Libro di crescita personale</option>
-            <option>Libro autobiografico</option>
-            <option>Workbook</option>
-            <option>Libro di attività</option>
-            <option>Libro di enigmistica</option>
-            <option>Parole crociate</option>
-            <option>Cerca parole</option>
-            <option>Coloring book</option>
-            <option>Libro di ricette</option>
-            <option>Guida pratica</option>
-            <option>Manuale</option>
-            <option>Altro</option>
-        </select>
-
-        <label>Tema principale</label>
-
-        <input
-            id="theme"
-            placeholder="Es. autostima, natura, cucina..."
-        >
-
-        <label>Tono di scrittura</label>
-
-        <select id="tone">
-
-            <option>Professionale e accessibile</option>
-            <option>Caldo ed empatico</option>
-            <option>Motivazionale</option>
-            <option>Didattico</option>
-            <option>Semplice e diretto</option>
-            <option>Elegante e narrativo</option>
-
-        </select>
-
-    </div>
-
-
-    <!-- KDP -->
-
-    <div class="card">
-
-        <h2>📐 3. Impostazioni KDP</h2>
-
-        <div class="grid">
-
-            <div>
-
-                <label>Pagine</label>
-
-                <input
-                    id="pages"
-                    type="number"
-                    min="50"
-                    value="60"
-                >
-
-            </div>
-
-            <div>
-
-                <label>Formato</label>
-
-                <select id="format">
-
-                    <option value="6x9">6 × 9 pollici</option>
-
-                    <option value="8x10">8 × 10 pollici</option>
-
-                    <option value="8.5x11">8,5 × 11 pollici</option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-        <div class="grid">
-
-            <div>
-
-                <label>Carta</label>
-
-                <select id="paper">
-
-                    <option value="white">Bianca</option>
-
-                    <option value="cream">Crema</option>
-
-                </select>
-
-            </div>
-
-            <div>
-
-                <label>Interno</label>
-
-                <select id="interior">
-
-                    <option value="bw">Bianco e nero</option>
-
-                    <option value="standard_color">
-                        Colore standard
-                    </option>
-
-                    <option value="premium_color">
-                        Colore premium
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-        <label>
-            <input
-                id="bleed"
-                type="checkbox"
-                style="width:auto;margin-right:8px;"
-            >
-            Il libro utilizza il bleed
-        </label>
-
-    </div>
-
-
-    <!-- ATTIVITÀ -->
-
-    <div class="card">
-
-        <h2>🧩 4. Attività</h2>
-
-        <label>Numero di attività desiderate</label>
-
-        <input
-            id="activities"
-            type="number"
-            min="0"
-            value="20"
-        >
-
-        <button
-            class="blue"
-            onclick="generatePlan()"
-        >
-            🚀 Genera struttura del libro
-        </button>
-
-        <div
-            id="planResult"
-            class="result hidden"
-        ></div>
-
-    </div>
-
-
-    <!-- REVISIONE -->
-
-    <div class="card">
-
-        <h2>🔍 5. Revisione editoriale</h2>
-
-        <p>
-            Inserisci un testo per effettuare un primo controllo
-            automatico di ripetizioni, spaziatura e punteggiatura.
-        </p>
-
-        <textarea
-            id="reviewText"
-            placeholder="Incolla qui il testo da controllare..."
-        ></textarea>
-
-        <button
-            class="green"
-            onclick="reviewText()"
-        >
-            🔎 Controlla il testo
-        </button>
-
-        <div
-            id="reviewResult"
-            class="result hidden"
-        ></div>
-
-    </div>
-
-
-    <!-- COPERTINA -->
-
-    <div class="card">
-
-        <h2>🎨 6. Calcolo copertina</h2>
-
-        <p>
-            Calcolo preliminare delle dimensioni della copertina.
-        </p>
-
-        <button
-            class="secondary"
-            onclick="calculateCover()"
-        >
-            📏 Calcola dimensioni
-        </button>
-
-        <div
-            id="coverResult"
-            class="result hidden"
-        ></div>
-
-    </div>
-
-
-    <!-- ESPORTAZIONE -->
-
-    <div class="card">
-
-        <h2>📤 7. Salva progetto</h2>
-
-        <p>
-            Salva le impostazioni del libro come progetto
-            KDP Book Studio.
-        </p>
-
-        <button
-            onclick="exportProject()"
-        >
-            💾 Esporta progetto
-        </button>
-
-        <div
-            id="exportResult"
-            class="result hidden"
-        ></div>
-
-    </div>
-
-
-    <div class="footer">
-        KDP Book Studio — versione in sviluppo
-    </div>
-
+<main>
+
+<header>
+<h1>📚 KDP Book Studio</h1>
+<p>Progetta e struttura il tuo libro per Amazon KDP.</p>
+</header>
+
+<div class="card">
+<h2>📕 Identità</h2>
+
+<label>Titolo</label>
+<input id="title" placeholder="Titolo del libro">
+
+<label>Sottotitolo</label>
+<input id="subtitle" placeholder="Sottotitolo">
+
+<label>Autore</label>
+<input id="author" placeholder="Nome e cognome">
+
+<label>Pubblico</label>
+<input id="audience" value="Adulti">
+
+<label>Lingua</label>
+<select id="language">
+<option>Italiano</option>
+<option>English</option>
+<option>Español</option>
+<option>Français</option>
+</select>
 </div>
 
+<div class="card">
+<h2>🎯 Contenuto</h2>
+
+<label>Tipo di libro</label>
+<select id="bookType">
+<option>Libro di crescita personale</option>
+<option>Libro autobiografico</option>
+<option>Workbook</option>
+<option>Libro di attività</option>
+<option>Libro di enigmistica</option>
+<option>Cerca parole</option>
+<option>Coloring book</option>
+<option>Libro di ricette</option>
+<option>Guida pratica</option>
+<option>Manuale</option>
+</select>
+
+<label>Tema principale</label>
+<input id="theme" placeholder="Es. crescita personale">
+
+<label>Tono</label>
+<select id="tone">
+<option>Professionale e accessibile</option>
+<option>Caldo ed empatico</option>
+<option>Motivazionale</option>
+<option>Didattico</option>
+<option>Semplice e diretto</option>
+<option>Elegante e narrativo</option>
+</select>
+</div>
+
+<div class="card">
+<h2>📐 Impostazioni KDP</h2>
+
+<label>Pagine</label>
+<input id="pages" type="number" min="50" value="60">
+
+<label>Formato</label>
+<select id="format">
+<option value="6x9">6 × 9</option>
+<option value="8x10">8 × 10</option>
+<option value="8.5x11">8,5 × 11</option>
+</select>
+
+<label>Carta</label>
+<select id="paper">
+<option value="white">Bianca</option>
+<option value="cream">Crema</option>
+</select>
+
+<label>Interno</label>
+<select id="interior">
+<option value="bw">Bianco e nero</option>
+<option value="standard_color">Colore standard</option>
+<option value="premium_color">Colore premium</option>
+</select>
+
+<label>
+<input id="bleed" type="checkbox" style="width:auto">
+ Utilizza bleed
+</label>
+</div>
+
+<div class="card">
+<h2>🧩 Attività</h2>
+
+<label>Numero attività</label>
+<input id="activities" type="number" min="0" value="20">
+
+<button class="blue" onclick="generate()">🚀 Genera struttura</button>
+
+<div id="plan" class="out" style="display:none"></div>
+</div>
+
+<div class="card">
+<h2>🔍 Revisione testo</h2>
+
+<textarea id="review" placeholder="Incolla qui il testo da controllare..."></textarea>
+
+<button class="green" onclick="reviewText()">🔎 Controlla testo</button>
+
+<div id="reviewOut" class="out" style="display:none"></div>
+</div>
+
+<div class="card">
+<h2>🎨 Copertina</h2>
+
+<button onclick="cover()">📏 Calcola dimensioni copertina</button>
+
+<div id="coverOut" class="out" style="display:none"></div>
+</div>
+
+<div class="card">
+<h2>💾 Progetto</h2>
+
+<button onclick="saveProject()">📤 Salva progetto</button>
+
+<div id="saveOut" class="out" style="display:none"></div>
+</div>
+
+</main>
 
 <script>
 
-function getFormat(){
-
-    const value =
-        document.getElementById("format").value;
-
-    if(value === "8x10"){
-        return {
-            width:8,
-            height:10
-        };
-    }
-
-    if(value === "8.5x11"){
-        return {
-            width:8.5,
-            height:11
-        };
-    }
-
-    return {
-        width:6,
-        height:9
-    };
+function format(){
+ let f=document.getElementById("format").value;
+ if(f=="8x10")return[8,10];
+ if(f=="8.5x11")return[8.5,11];
+ return[6,9];
 }
 
-
-function collectData(){
-
-    const format = getFormat();
-
-    return {
-
-        title:
-            document.getElementById("title").value,
-
-        subtitle:
-            document.getElementById("subtitle").value,
-
-        author:
-            document.getElementById("author").value,
-
-        language:
-            document.getElementById("language").value,
-
-        audience:
-            document.getElementById("audience").value,
-
-        book_type:
-            document.getElementById("bookType").value,
-
-        theme:
-            document.getElementById("theme").value,
-
-        tone:
-            document.getElementById("tone").value,
-
-        pages:
-            Number(
-                document.getElementById("pages").value
-            ),
-
-        width:
-            format.width,
-
-        height:
-            format.height,
-
-        paper:
-            document.getElementById("paper").value,
-
-        interior:
-            document.getElementById("interior").value,
-
-        bleed:
-            document.getElementById("bleed").checked,
-
-        activities:
-            Number(
-                document.getElementById("activities").value
-            )
-    };
+function data(){
+ let f=format();
+ return{
+  title:document.getElementById("title").value,
+  subtitle:document.getElementById("subtitle").value,
+  author:document.getElementById("author").value,
+  audience:document.getElementById("audience").value,
+  language:document.getElementById("language").value,
+  book_type:document.getElementById("bookType").value,
+  theme:document.getElementById("theme").value,
+  tone:document.getElementById("tone").value,
+  pages:Number(document.getElementById("pages").value),
+  width:f[0],
+  height:f[1],
+  paper:document.getElementById("paper").value,
+  interior:document.getElementById("interior").value,
+  bleed:document.getElementById("bleed").checked,
+  activities:Number(document.getElementById("activities").value)
+ };
 }
 
-
-async function generatePlan(){
-
-    const result =
-        document.getElementById("planResult");
-
-    result.classList.remove("hidden");
-
-    result.textContent =
-        "⏳ Sto costruendo la struttura...";
-
-    try{
-
-        const response =
-            await fetch("/api/plan",{
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body:
-                    JSON.stringify(
-                        collectData()
-                    )
-            });
-
-        const data =
-            await response.json();
-
-        let text =
-            "✅ STRUTTURA GENERATA\n\n";
-
-        text +=
-            "Titolo: " +
-            data.metadata.title +
-            "\n";
-
-        text +=
-            "Pagine: " +
-            data.spec.pages_target +
-            "\n";
-
-        text +=
-            "Formato: " +
-            data.spec.trim_width_in +
-            " × " +
-            data.spec.trim_height_in +
-            " pollici\n";
-
-        text +=
-            "Capitoli: " +
-            data.sections.length +
-            "\n\n";
-
-        data.sections.forEach(section =>{
-
-            text +=
-                section.number +
-                ". " +
-                section.title +
-                " — circa " +
-                section.estimated_pages +
-                " pagine\n";
-
-        });
-
-        result.textContent = text;
-
-    }catch(error){
-
-        result.textContent =
-            "❌ Errore: " +
-            error.message;
-
-    }
+async function post(url,body){
+ let r=await fetch(url,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify(body)
+ });
+ let t=await r.text();
+ let j;
+ try{j=JSON.parse(t)}catch(e){throw new Error("Risposta non valida dal server")}
+ if(!r.ok)throw new Error(j.error||"Errore del server");
+ return j;
 }
 
+async function generate(){
+ let o=document.getElementById("plan");
+ o.style.display="block";
+ o.textContent="⏳ Generazione in corso...";
+ try{
+  let d=await post("/api/plan",data());
+  let s="✅ STRUTTURA GENERATA\n\n";
+  s+="Titolo: "+d.metadata.title+"\n";
+  s+="Pagine: "+d.spec.pages_target+"\n";
+  s+="Formato: "+d.spec.trim_width_in+" × "+d.spec.trim_height_in+"\n";
+  s+="Capitoli: "+d.sections.length+"\n\n";
+  d.sections.forEach(x=>{
+   s+=x.number+". "+x.title+" — circa "+x.estimated_pages+" pagine\n";
+  });
+  o.textContent=s;
+ }catch(e){o.textContent="❌ "+e.message}
+}
 
 async function reviewText(){
-
-    const text =
-        document.getElementById("reviewText").value;
-
-    const result =
-        document.getElementById("reviewResult");
-
-    result.classList.remove("hidden");
-
-    if(!text.trim()){
-
-        result.textContent =
-            "⚠️ Inserisci prima un testo.";
-
-        return;
-    }
-
-    result.textContent =
-        "⏳ Analisi del testo...";
-
-    try{
-
-        const response =
-            await fetch("/api/review",{
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body:
-                    JSON.stringify({
-                        text:text
-                    })
-            });
-
-        const data =
-            await response.json();
-
-        let html = "";
-
-        html +=
-            "<strong>Punteggio preliminare: " +
-            data.score +
-            "/100</strong><br><br>";
-
-        html +=
-            '<span class="stat">Parole: ' +
-            data.stats.words +
-            '</span>';
-
-        html +=
-            '<span class="stat">Frasi: ' +
-            data.stats.sentences +
-            '</span>';
-
-        html +=
-            '<span class="stat">Caratteri: ' +
-            data.stats.characters +
-            '</span>';
-
-        if(data.issues.length){
-
-            html +=
-                "<br><br><strong>Problemi rilevati:</strong>";
-
-            data.issues.forEach(issue =>{
-
-                html +=
-                    '<div class="warning">' +
-                    "⚠️ " +
-                    issue.message +
-                    "</div>";
-
-            });
-
-        }else{
-
-            html +=
-                '<div class="success">' +
-                "✅ Nessun problema automatico rilevato." +
-                "</div>";
-
-        }
-
-        result.innerHTML = html;
-
-    }catch(error){
-
-        result.textContent =
-            "❌ Errore: " +
-            error.message;
-
-    }
+ let o=document.getElementById("reviewOut");
+ o.style.display="block";
+ let text=document.getElementById("review").value;
+ if(!text.trim()){o.textContent="⚠️ Inserisci un testo.";return}
+ o.textContent="⏳ Controllo...";
+ try{
+  let d=await post("/api/review",{text:text});
+  let s="✅ Punteggio preliminare: "+d.score+"/100\n\n";
+  s+="Parole: "+d.stats.words+"\n";
+  s+="Frasi: "+d.stats.sentences+"\n";
+  s+="Caratteri: "+d.stats.characters+"\n\n";
+  if(d.issues.length){
+   s+="⚠️ Problemi:\n";
+   d.issues.forEach(x=>s+="• "+x.message+"\n");
+  }else s+="Nessun problema automatico rilevato.";
+  o.textContent=s;
+ }catch(e){o.textContent="❌ "+e.message}
 }
 
-
-async function calculateCover(){
-
-    const result =
-        document.getElementById("coverResult");
-
-    result.classList.remove("hidden");
-
-    result.textContent =
-        "⏳ Calcolo...";
-
-    const data =
-        collectData();
-
-    try{
-
-        const response =
-            await fetch("/api/cover",{
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body:
-                    JSON.stringify({
-
-                        width:data.width,
-
-                        height:data.height,
-
-                        pages:data.pages,
-
-                        paper:data.paper,
-
-                        interior:data.interior
-
-                    })
-            });
-
-        const cover =
-            await response.json();
-
-        result.textContent =
-            "📕 COPERTINA\n\n" +
-
-            "Larghezza totale: " +
-            cover.cover_width_in +
-            " pollici\n" +
-
-            "Altezza totale: " +
-            cover.cover_height_in +
-            " pollici\n" +
-
-            "Dorso: " +
-            cover.spine_in +
-            " pollici\n\n" +
-
-            "⚠️ " +
-            cover.note;
-
-    }catch(error){
-
-        result.textContent =
-            "❌ Errore: " +
-            error.message;
-
-    }
+async function cover(){
+ let o=document.getElementById("coverOut");
+ o.style.display="block";
+ o.textContent="⏳ Calcolo...";
+ try{
+  let d=data();
+  let c=await post("/api/cover",{
+   width:d.width,height:d.height,pages:d.pages,
+   paper:d.paper,interior:d.interior
+  });
+  o.textContent=
+   "📕 COPERTINA\n\n"+
+   "Larghezza: "+c.cover_width_in+" pollici\n"+
+   "Altezza: "+c.cover_height_in+" pollici\n"+
+   "Dorso: "+c.spine_in+" pollici\n\n"+
+   "⚠️ "+c.note;
+ }catch(e){o.textContent="❌ "+e.message}
 }
 
+async function saveProject(){
+ let o=document.getElementById("saveOut");
+ o.style.display="block";
+ o.textContent="⏳ Salvataggio...";
+ try{
+  let d=await post("/api/export-project",data());
+  o.innerHTML='<div class="ok">✅ Progetto salvato.<br><br><a href="'+d.url+'">📥 Scarica progetto</a></div>';
+ }catch(e){o.textContent="❌ "+e.message}
+}
 
-async function exportProject(){
-
-    const result =
-        document.getElementById("exportResult");
-
-   
+</script>
+</body>
+</html>
